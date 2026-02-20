@@ -1,0 +1,14 @@
+# Xcode
+DerivedData/
+Derived/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+xcuserdata/
+
+# Tuist generated
+*.xcodeproj/
+*.xcworkspace/
+
+# macOS
+.DS_Store
