@@ -3,6 +3,8 @@ name: PR Checks
 on:
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 
 concurrency:
   group: pr-${{ github.ref }}
@@ -11,14 +13,23 @@ concurrency:
 jobs:
   build-test-lint:
     runs-on: macos-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install tools (Brewfile)
-        run: |
-          brew update
-          brew bundle
+      # Install mise (official action) and then install tools from mise.toml
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+
+      - name: Install tools (mise)
+        run: mise install
+
+      # Install brew tools listed in Brewfile (swiftlint/xcbeautify/jq)
+      - name: Install tools (Homebrew)
+        run: brew bundle
 
       - name: Tuist generate
         run: tuist generate
