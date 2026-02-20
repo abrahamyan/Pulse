@@ -1,0 +1,26 @@
+# Keep this minimal to start; we’ll tune as modules grow.
+
+disabled_rules:
+  - trailing_whitespace
+
+opt_in_rules:
+  - empty_count
+  - empty_string
+  - first_where
+  - implicit_return
+  - redundant_type_annotation
+  - sorted_imports
+
+included:
+  - Pulse
+  - Tuist
+  - Project.swift
+
+excluded:
+  - .build
+  - Derived
+  - DerivedData
+  - Tuist/Dependencies
+  - **/*.generated.swift
+
+reporter: "xcode"
