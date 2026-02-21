@@ -1,0 +1,44 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-lint:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Install mise (official action) and then install tools from mise.toml
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+
+      - name: Install tools (mise)
+        run: mise install
+
+      # Install brew tools listed in Brewfile (swiftlint/xcbeautify/jq)
+      - name: Install tools (Homebrew)
+        run: brew bundle
+
+      - name: Tuist generate
+        run: tuist generate
+
+      - name: SwiftLint
+        run: swiftlint lint
+
+      - name: Build & Test
+        run: |
+          xcodebuild \
+            -workspace Pulse.xcworkspace \
+            -scheme Pulse \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            test | xcbeautify
