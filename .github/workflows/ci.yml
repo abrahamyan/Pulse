@@ -1,16 +1,16 @@
-name: CI
+name: Pulse CI Gate
 
 on:
   pull_request:
     branches: [ main ]
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: pulse-ci-gate-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  ci:
-    name: ci
+  gate:
+    name: gate
     runs-on: macos-latest
     steps:
       - name: Checkout
